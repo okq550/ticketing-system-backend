@@ -34,3 +34,6 @@ build/
 
 ### Database files ###
 postgres_data/
+
+### Keycloak files ###
+Keycloak_data/
