@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.okq550</groupId>
-	<artifactId>Tickets</artifactId>
+	<artifactId>ticketing-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Tickets</name>
+	<name>ticketing-system</name>
 	<description>Simple invoicing system using spring boot</description>
 	<url/>
 	<licenses>
@@ -48,6 +48,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
