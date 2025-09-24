@@ -63,7 +63,8 @@ public class Event {
     private List<User> staff = new ArrayList<>();
 
     // 1 event can have multiple event types
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    // Allow hibernate to remove without touching the parent.
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketType> ticketTypes = new ArrayList<>();
 
     @CreatedDate

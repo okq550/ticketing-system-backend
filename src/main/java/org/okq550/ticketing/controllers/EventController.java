@@ -2,12 +2,10 @@ package org.okq550.ticketing.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.okq550.ticketing.domain.dtos.CreateEventRequestDto;
-import org.okq550.ticketing.domain.dtos.CreateEventResponseDto;
-import org.okq550.ticketing.domain.dtos.GetEventDetailsResponseDto;
-import org.okq550.ticketing.domain.dtos.ListEventResponseDto;
+import org.okq550.ticketing.domain.dtos.*;
 import org.okq550.ticketing.domain.entities.Event;
 import org.okq550.ticketing.domain.requests.CreateEventRequest;
+import org.okq550.ticketing.domain.requests.UpdateEventRequest;
 import org.okq550.ticketing.mappers.EventMapper;
 import org.okq550.ticketing.services.EventService;
 import org.springframework.data.domain.Page;
@@ -35,7 +33,7 @@ public class EventController {
         CreateEventRequest createEventRequest = eventMapper.fromDto(createEventRequestDto);
         UUID userId = parseUUID(jwt);
         Event createdEvent = eventService.createEvent(userId, createEventRequest);
-        CreateEventResponseDto createEventResponseDto = eventMapper.toDto(createdEvent);
+        CreateEventResponseDto createEventResponseDto = eventMapper.toCreateEventResponseDto(createdEvent);
         return new ResponseEntity<>(createEventResponseDto, HttpStatus.CREATED);
     }
 
@@ -55,6 +53,29 @@ public class EventController {
         return eventService.getEventByOrganizerIdAndId(userId, eventId).map(eventMapper::toGetEventDetailsResponseDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping(path = "/{eventId}")
+    public ResponseEntity<UpdateEventResponseDto> updateEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId,
+            @Valid @RequestBody UpdateEventRequestDto updateEventRequestDto
+    ) {
+        UpdateEventRequest updateEventRequest = eventMapper.fromDto(updateEventRequestDto);
+        UUID userId = parseUUID(jwt);
+        Event updatedEvent = eventService.updateEvent(userId, eventId, updateEventRequest);
+        UpdateEventResponseDto updateEventResponseDto = eventMapper.toUpdateEventResponseDto(updatedEvent);
+        return ResponseEntity.ok(updateEventResponseDto);
+    }
+
+    @DeleteMapping(path = "/{eventId}")
+    public ResponseEntity<Void> deleteEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId
+    ) {
+        UUID userId = parseUUID(jwt);
+        eventService.deleteEvent(userId, eventId);
+        return ResponseEntity.noContent().build();
     }
 
     private UUID parseUUID(Jwt jwt) {
