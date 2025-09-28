@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.okq550.ticketing.domain.entities.Event;
 import org.okq550.ticketing.domain.entities.TicketType;
 import org.okq550.ticketing.domain.entities.User;
+import org.okq550.ticketing.domain.enums.EventStatusEnum;
 import org.okq550.ticketing.domain.requests.CreateEventRequest;
 import org.okq550.ticketing.domain.requests.UpdateEventRequest;
 import org.okq550.ticketing.domain.requests.UpdateTicketTypeRequest;
@@ -144,5 +145,20 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public void deleteEvent(UUID organizerId, UUID id) {
         getEventByOrganizerIdAndId(organizerId, id).ifPresent(eventRepository::delete);
+    }
+
+    @Override
+    public Page<Event> listPublishedEvents(Pageable pageable) {
+        return eventRepository.findByStatus(EventStatusEnum.PUBLISHED, pageable);
+    }
+
+    @Override
+    public Page<Event> searchPublishedEvents(String query, Pageable pageable) {
+        return eventRepository.searchEvents(query, pageable);
+    }
+
+    @Override
+    public Optional<Event> getPublishedEvent(UUID id) {
+        return eventRepository.findByIdAndStatus(id, EventStatusEnum.PUBLISHED);
     }
 }

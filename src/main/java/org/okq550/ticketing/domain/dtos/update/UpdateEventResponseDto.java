@@ -1,4 +1,4 @@
-package org.okq550.ticketing.domain.dtos;
+package org.okq550.ticketing.domain.dtos.update;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class UpdateEventResponseDto {
     private LocalDateTime salesStart;
     private LocalDateTime salesEnd;
     private EventStatusEnum status;
-    private List<UpdateEventResponseDto> ticketTypes;
+    private List<UpdateTicketTypeResponseDto> ticketTypes;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

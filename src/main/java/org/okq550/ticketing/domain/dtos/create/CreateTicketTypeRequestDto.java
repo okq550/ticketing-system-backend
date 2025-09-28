@@ -1,4 +1,4 @@
-package org.okq550.ticketing.domain.dtos;
+package org.okq550.ticketing.domain.dtos.create;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,13 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateTicketTypeRequestDto {
-    private UUID id;
+public class CreateTicketTypeRequestDto {
     @NotBlank(message = "name is required")
     private String name;
     @NotNull(message = "price is required")

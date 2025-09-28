@@ -3,6 +3,7 @@ package org.okq550.ticketing.config;
 import org.okq550.ticketing.filters.UserProvisioningFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,13 +16,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, UserProvisioningFilter userProvisioningFilter) throws
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           UserProvisioningFilter userProvisioningFilter,
+                                           JwtAuthenticationConverter jwtAuthenticationConverter) throws
             Exception {
         http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
-                        // Catch all routes rule
-                        authorize -> authorize.anyRequest().authenticated())
+                        authorize -> authorize
+                                // Permit this route, Making it public.
+                                .requestMatchers(HttpMethod.GET, "/api/v1/published-events/**").permitAll()
+                                // Catch all routes rule
+                                .anyRequest().authenticated())
                 // Disable CSRF
                 .csrf(csrf -> csrf.disable())
                 // Sessions are stateless
@@ -30,7 +36,9 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Add our custom filter
                 .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                        oauth2 ->
+                                oauth2.jwt(jwt ->
+                                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
                 .addFilterAfter(userProvisioningFilter, BearerTokenAuthenticationFilter.class);
 
         return http.build();

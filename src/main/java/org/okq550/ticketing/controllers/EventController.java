@@ -2,7 +2,12 @@ package org.okq550.ticketing.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.okq550.ticketing.domain.dtos.*;
+import org.okq550.ticketing.domain.dtos.create.CreateEventRequestDto;
+import org.okq550.ticketing.domain.dtos.create.CreateEventResponseDto;
+import org.okq550.ticketing.domain.dtos.details.GetEventDetailsResponseDto;
+import org.okq550.ticketing.domain.dtos.list.ListEventResponseDto;
+import org.okq550.ticketing.domain.dtos.update.UpdateEventRequestDto;
+import org.okq550.ticketing.domain.dtos.update.UpdateEventResponseDto;
 import org.okq550.ticketing.domain.entities.Event;
 import org.okq550.ticketing.domain.requests.CreateEventRequest;
 import org.okq550.ticketing.domain.requests.UpdateEventRequest;
@@ -17,6 +22,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import static org.okq550.ticketing.util.JwtUtil.parseUUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/events")
@@ -76,9 +83,5 @@ public class EventController {
         UUID userId = parseUUID(jwt);
         eventService.deleteEvent(userId, eventId);
         return ResponseEntity.noContent().build();
-    }
-
-    private UUID parseUUID(Jwt jwt) {
-        return UUID.fromString(jwt.getSubject());
     }
 }

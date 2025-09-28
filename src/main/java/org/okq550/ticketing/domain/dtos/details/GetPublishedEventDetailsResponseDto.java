@@ -1,9 +1,8 @@
-package org.okq550.ticketing.domain.dtos;
+package org.okq550.ticketing.domain.dtos.details;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.okq550.ticketing.domain.entities.TicketType;
 import org.okq550.ticketing.domain.enums.EventStatusEnum;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListEventResponseDto {
+public class GetPublishedEventDetailsResponseDto {
     private UUID id;
     private String name;
     private String start;
@@ -23,7 +22,8 @@ public class ListEventResponseDto {
     private LocalDateTime salesStart;
     private LocalDateTime salesEnd;
     private EventStatusEnum status;
-    private List<ListEventTicketTypeResponseDto> ticketTypes = new ArrayList<>();
+    private List<GetPublishedEventDetailsTicketTypesResponseDto> ticketTypes = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
 }

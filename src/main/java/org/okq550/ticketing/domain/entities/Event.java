@@ -33,7 +33,7 @@ public class Event {
     @Column(name = "event_nd")
     private String end;
 
-    @Column(name = "veneue", nullable = false)
+    @Column(name = "venue", nullable = false)
     private String venue;
 
     @Column(name = "sales_start")

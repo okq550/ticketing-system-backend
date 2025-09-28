@@ -2,7 +2,19 @@ package org.okq550.ticketing.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.okq550.ticketing.domain.dtos.*;
+import org.okq550.ticketing.domain.dtos.details.GetPublishedEventDetailsResponseDto;
+import org.okq550.ticketing.domain.dtos.create.CreateEventRequestDto;
+import org.okq550.ticketing.domain.dtos.create.CreateEventResponseDto;
+import org.okq550.ticketing.domain.dtos.create.CreateTicketTypeRequestDto;
+import org.okq550.ticketing.domain.dtos.details.GetEventDetailsResponseDto;
+import org.okq550.ticketing.domain.dtos.details.GetEventDetailsTicketTypesResponseDto;
+import org.okq550.ticketing.domain.dtos.list.ListEventResponseDto;
+import org.okq550.ticketing.domain.dtos.list.ListEventTicketTypeResponseDto;
+import org.okq550.ticketing.domain.dtos.list.ListPublishedEventResponseDto;
+import org.okq550.ticketing.domain.dtos.update.UpdateEventRequestDto;
+import org.okq550.ticketing.domain.dtos.update.UpdateEventResponseDto;
+import org.okq550.ticketing.domain.dtos.update.UpdateTicketTypeRequestDto;
+import org.okq550.ticketing.domain.dtos.update.UpdateTicketTypeResponseDto;
 import org.okq550.ticketing.domain.entities.Event;
 import org.okq550.ticketing.domain.entities.TicketType;
 import org.okq550.ticketing.domain.requests.CreateEventRequest;
@@ -26,4 +38,7 @@ public interface EventMapper {
     UpdateEventRequest fromDto(UpdateEventRequestDto dto);
     UpdateTicketTypeResponseDto toUpdateTicketTypeResponseDto(TicketType ticketType);
     UpdateEventResponseDto toUpdateEventResponseDto(Event event);
+
+    ListPublishedEventResponseDto toListPublishedEventResponseDto(Event event);
+    GetPublishedEventDetailsResponseDto toGetPublishedEventDetailsResponseDto(Event event);
 }

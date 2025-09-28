@@ -1,4 +1,4 @@
-package org.okq550.ticketing.domain.dtos;
+package org.okq550.ticketing.domain.dtos.create;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -12,14 +12,11 @@ import org.okq550.ticketing.domain.enums.EventStatusEnum;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateEventRequestDto {
-    @NotNull(message = "id is required")
-    private UUID id;
+public class CreateEventRequestDto {
     @NotBlank(message = "name is required")
     private String name;
     private String start;
@@ -32,5 +29,5 @@ public class UpdateEventRequestDto {
     private EventStatusEnum status;
     @NotEmpty(message = "ticket type is required")
     @Valid
-    private List<UpdateTicketTypeRequestDto> ticketTypes = new ArrayList<>();
+    private List<CreateTicketTypeRequestDto> ticketTypes = new ArrayList<>();
 }

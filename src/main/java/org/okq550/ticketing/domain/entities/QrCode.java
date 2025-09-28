@@ -21,14 +21,16 @@ public class QrCode {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.UUID)
+    // @GeneratedValue(strategy = GenerationType.UUID)
+    // We want to manually generate the ID for the QR code
     private UUID id;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private QrCodeStatusEnum status;
 
-    @Column(name = "value", nullable = false)
+    // We need this field to expand as we need, In this case it will hold a base64 image code
+    @Column(name = "value", columnDefinition = "TEXT", nullable = false)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)

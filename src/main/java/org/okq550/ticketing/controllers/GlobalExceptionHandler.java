@@ -3,10 +3,7 @@ package org.okq550.ticketing.controllers;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.okq550.ticketing.domain.dtos.ErrorDto;
-import org.okq550.ticketing.exceptions.EventNotFoundException;
-import org.okq550.ticketing.exceptions.EventUpdateException;
-import org.okq550.ticketing.exceptions.TicketTypeNotFoundException;
-import org.okq550.ticketing.exceptions.UserNotFoundException;
+import org.okq550.ticketing.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,6 +19,15 @@ import java.util.List;
 // Access to logger
 @Slf4j
 public class GlobalExceptionHandler {
+
+    // Generic unknown exception handler
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDto> handleException(Exception ex) {
+        log.error("Caught Exception", ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("An error has occurred");
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     // Event not found exception handler
     @ExceptionHandler(EventNotFoundException.class)
@@ -89,12 +95,33 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
-    // Generic unknown exception handler
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDto> handleException(Exception ex) {
-        log.error("Caught Exception", ex);
+    // QrCode Generate exception handler
+    @ExceptionHandler(QrCodeGenerationException.class)
+    public ResponseEntity<ErrorDto> handleQrCodeGenerationException(QrCodeGenerationException ex) {
+        log.error("Caught QrCodeGenerationException", ex);
         ErrorDto errorDto = new ErrorDto();
-        errorDto.setError("An error has occurred");
+        String errorMessage = "QrCode generate error";
+        errorDto.setError(errorMessage);
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // QrCode Not Found exception handler
+    @ExceptionHandler(QrCodeNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleQrCodeNotFoundException(QrCodeNotFoundException ex) {
+        log.error("Caught QrCodeNotFoundException", ex);
+        ErrorDto errorDto = new ErrorDto();
+        String errorMessage = "QrCode not found error";
+        errorDto.setError(errorMessage);
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // QrCode Not Found exception handler
+    @ExceptionHandler(TicketsSoldOutException.class)
+    public ResponseEntity<ErrorDto> handleTicketsSoldOutException(TicketsSoldOutException ex) {
+        log.error("Caught TicketsSoldOutException", ex);
+        ErrorDto errorDto = new ErrorDto();
+        String errorMessage = "TicketType is sold out";
+        errorDto.setError(errorMessage);
+        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 }

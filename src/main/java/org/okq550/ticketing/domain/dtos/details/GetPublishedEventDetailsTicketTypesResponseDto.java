@@ -1,4 +1,4 @@
-package org.okq550.ticketing.domain.dtos;
+package org.okq550.ticketing.domain.dtos.details;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetEventDetailsTicketTypesResponseDto {
+public class GetPublishedEventDetailsTicketTypesResponseDto {
     private UUID id;
     private String name;
     private Double price;
