@@ -11,7 +11,7 @@ import java.util.UUID;
 public final class JwtUtil {
     private JwtUtil(){}
 
-    public static UUID parseUUID(Jwt jwt) {
+    public static UUID parseUserId(Jwt jwt) {
         return UUID.fromString(jwt.getSubject());
     }
 }

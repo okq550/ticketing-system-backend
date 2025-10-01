@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static org.okq550.ticketing.util.JwtUtil.parseUUID;
+import static org.okq550.ticketing.util.JwtUtil.parseUserId;
 
 @RestController
 @RequestMapping(path = "/api/v1/events")
 @RequiredArgsConstructor
 public class EventController {
-    private final EventMapper eventMapper;
     private final EventService eventService;
+    private final EventMapper eventMapper;
 
     @PostMapping
     public ResponseEntity<CreateEventResponseDto> createEvent(
@@ -38,7 +38,7 @@ public class EventController {
             @Valid @RequestBody CreateEventRequestDto createEventRequestDto
             ) {
         CreateEventRequest createEventRequest = eventMapper.fromDto(createEventRequestDto);
-        UUID userId = parseUUID(jwt);
+        UUID userId = parseUserId(jwt);
         Event createdEvent = eventService.createEvent(userId, createEventRequest);
         CreateEventResponseDto createEventResponseDto = eventMapper.toCreateEventResponseDto(createdEvent);
         return new ResponseEntity<>(createEventResponseDto, HttpStatus.CREATED);
@@ -46,7 +46,7 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<Page<ListEventResponseDto>> listEvents(@AuthenticationPrincipal Jwt jwt, Pageable pageable) {
-        UUID userId = parseUUID(jwt);
+        UUID userId = parseUserId(jwt);
         Page<Event> events = eventService.listEvents(userId, pageable);
         return ResponseEntity.ok(events.map(eventMapper::toListEventResponseDto));
     }
@@ -56,7 +56,7 @@ public class EventController {
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID eventId
     ) {
-        UUID userId = parseUUID(jwt);
+        UUID userId = parseUserId(jwt);
         return eventService.getEventByOrganizerIdAndId(userId, eventId).map(eventMapper::toGetEventDetailsResponseDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -69,7 +69,7 @@ public class EventController {
             @Valid @RequestBody UpdateEventRequestDto updateEventRequestDto
     ) {
         UpdateEventRequest updateEventRequest = eventMapper.fromDto(updateEventRequestDto);
-        UUID userId = parseUUID(jwt);
+        UUID userId = parseUserId(jwt);
         Event updatedEvent = eventService.updateEvent(userId, eventId, updateEventRequest);
         UpdateEventResponseDto updateEventResponseDto = eventMapper.toUpdateEventResponseDto(updatedEvent);
         return ResponseEntity.ok(updateEventResponseDto);
@@ -80,7 +80,7 @@ public class EventController {
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID eventId
     ) {
-        UUID userId = parseUUID(jwt);
+        UUID userId = parseUserId(jwt);
         eventService.deleteEvent(userId, eventId);
         return ResponseEntity.noContent().build();
     }

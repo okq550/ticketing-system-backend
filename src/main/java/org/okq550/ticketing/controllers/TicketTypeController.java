@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static org.okq550.ticketing.util.JwtUtil.parseUUID;
+import static org.okq550.ticketing.util.JwtUtil.parseUserId;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class TicketTypeController {
 
     @PostMapping(path = "/{ticketTypeId}/tickets")
     public ResponseEntity<Void> purchaseTicket(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID ticketTypeId) {
-        ticketTypeService.purchaseTicket(parseUUID(jwt), ticketTypeId);
+        ticketTypeService.purchaseTicket(parseUserId(jwt), ticketTypeId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

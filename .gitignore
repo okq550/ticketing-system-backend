@@ -37,3 +37,6 @@ postgres_data/
 
 ### Keycloak files ###
 Keycloak_data/
+
+#Ignore cursor AI rules
+.cursor/rules/codacy.mdc

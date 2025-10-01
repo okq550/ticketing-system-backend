@@ -6,10 +6,12 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.okq550.ticketing.domain.entities.QrCode;
 import org.okq550.ticketing.domain.entities.Ticket;
 import org.okq550.ticketing.domain.enums.QrCodeStatusEnum;
 import org.okq550.ticketing.exceptions.QrCodeGenerationException;
+import org.okq550.ticketing.exceptions.QrCodeNotFoundException;
 import org.okq550.ticketing.repositories.QrCodeRepository;
 import org.okq550.ticketing.services.QrCodeService;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QrCodeServiceImpl implements QrCodeService {
 
     private static final int QR_HEIGHT = 300;
@@ -46,6 +49,20 @@ public class QrCodeServiceImpl implements QrCodeService {
             throw new QrCodeGenerationException("Failed to generate QR code", ex);
         }
 
+    }
+
+    @Override
+    public byte[] getQrCodeImageForUserAndTicket(UUID userId, UUID ticketId) {
+        QrCode qrCode = qrCodeRepository.findByTicketIdAndTicketPurchaserId(ticketId, userId)
+                .orElseThrow(QrCodeNotFoundException::new);
+
+        try {
+            return Base64.getDecoder().decode(qrCode.getValue());
+        }
+        catch (IllegalArgumentException ex) {
+            log.error("Invalid base64 QR Code for ticket ID: {}", ticketId, ex);
+            throw new QrCodeNotFoundException(String.format("QrCode for ticket Id %s is not found", ticketId));
+        }
     }
 
     private String generateQrCodeImage(UUID uniqueId) throws WriterException, IOException {

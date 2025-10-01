@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,16 +13,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 public class JwtAuthenticationConverter implements Converter<Jwt, JwtAuthenticationToken> {
     @Override
     public JwtAuthenticationToken convert(Jwt jwt) {
         // Convert the Jwt provided from the request headers to the spring security uses internally.
-        Collection<GrantedAuthority> authorities = extractAuthroties(jwt);
+        Collection<GrantedAuthority> authorities = extractAuthorities(jwt);
 
         return new JwtAuthenticationToken(jwt, authorities);
     }
 
-    private Collection<GrantedAuthority> extractAuthroties(Jwt jwt) {
+    private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
 
         if(realmAccess == null || !realmAccess.containsKey("roles")) {
